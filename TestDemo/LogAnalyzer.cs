@@ -10,7 +10,12 @@ namespace TestDemo
     {
         public bool IsValidLogFileName(string filenName)
         {
-            if (!filenName.EndsWith(".SLF"))
+            if (string.IsNullOrEmpty(filenName)) {
+                throw new ArgumentException(
+                    "filename has to be provided");
+            }
+
+            if (!filenName.EndsWith(".SLF",StringComparison.CurrentCultureIgnoreCase))
             {
                 return false;
             }

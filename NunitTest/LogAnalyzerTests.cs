@@ -14,21 +14,53 @@ namespace NunitTest
         [Test]
         public void IsValidateFileName_BadExtension_ReturnsFalse()
         {
+            //Arrange
             LogAnalyzer analyzer = new LogAnalyzer();
 
+            //Act
             bool result = analyzer.IsValidLogFileName("filewithbadextension.foo");
-            Console.WriteLine(result);
+
+            //Assert
             Assert.False(result);
         }
 
-        [Test]
-        public void IsValidateFileName_GoodExtension_ReturnsTrue()
+        [TestCase("filewithgoodextension.SLF")]
+        [TestCase("filewithgoodextension.slf")]
+        public void IsValidateFileName_ExtensionUppercase_ReturnsTrue(string file)
         {
+            //Arrange
             LogAnalyzer analyzer = new LogAnalyzer();
 
-            bool result = analyzer.IsValidLogFileName("filewithbadextension.SLF");
-            Console.WriteLine(result);
+            //Act
+            bool result = analyzer.IsValidLogFileName(file);
+
+            //Assert
             Assert.True(result);
+        }
+
+        [Test]
+        public void IsValidFileName_EmptyFileName_ThrowException()
+        {
+            ////Usage 1------------------------------------------
+            ////Arrange
+            //LogAnalyzer analyzer = new LogAnalyzer();
+
+            ////Act
+
+            ////Assert
+            //Assert.That(() => analyzer.IsValidLogFileName(string.Empty),
+            //    Throws.TypeOf<ArgumentException>());
+            //----------------------------------------------------
+
+            //Usage 2------------------------------------------
+            //Arrange
+            LogAnalyzer analyzer = new LogAnalyzer();
+
+            //Act
+            var ex = Assert.Catch<Exception>(() => analyzer.IsValidLogFileName(string.Empty));
+
+            //Assert
+            StringAssert.Contains("filename has to be provided", ex.Message);
         }
     }
 }
